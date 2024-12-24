@@ -1,6 +1,3 @@
-<?php
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="../private/insertar.php" id="nuevo_restaurante">Nuevo Restaurante</a>
+                    <a class="nav-link" aria-current="page" href="../public/index.php" id="inicio">Inicio</a>
                 </li>
             </ul>
             <div class="d-flex" id="form-login">
@@ -42,70 +39,63 @@
     </div>
 </nav>
 
-<!-- Page Content -->
-<div class="container-fluid bg-info mb-5">
-    <div class="row py-2">
-        <div class="col-md-3">
-            <img class="img-fluid rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3-amGm2gh_xVI1MX5PrKVbpUN_mxFim5RoA&s" alt="">
-        </div>
-        <div class="col">
-            <h1 class="display-3">Descubra y reserva el mejor restaurante</h1>
-            <p class="lead">una aplicación de 4Vientos.</p>
-            <form class="input-group">
-                <input name="buscador" class="form-control" />
-                <button class="btn btn-primary" type="submit" >Buscar</button>
-            </form>
-        </div>
-    </div>
-</div>
+<!-- FORMULARIO DE INSERCIÓN -->
+<form class="container" method="post" action="../../../controllers/RestauranteController.php">
+    <input type="hidden" id="type" name="type" value="create">
+    <?php
+        if (isset($_GET['error'])) {
+            echo "<p>{$_GET['error']}</p>";
+        }
 
-<!-- Content Row -->
-<div class="container mtop-5">
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 mb-5">
-            <div class="card h-100">
-                <img class="card-img-top"
-                src="https://res.cloudinary.com/tf-lab/image/upload/w_600,h_337,c_fill,g_auto:subject,q_auto,f_auto/restaurant/9ca6ab00-5644-45a4-90fc-c27464818e98/baae3255-f0dd-414e-a0d7-deaa76a00e32.jpg"
-                alt="Card image cap">
-                <div class="card-body">
-                    <span class="badge bg-primary">20-30 €</span>
-                    <h4 class="card-title">La Tagliatella Iruña</h4>
-                    <p class="card-text">
-                        Risotto Magret y tartufina
-                    </p>
-                </div>
-                <div class="card-footer d-flex justify-content-around">
-                    <a href="#" class="btn btn-warning">
-                        Editar
-                    </a>
-                    <a href="#" class="btn btn-danger">
-                        Borrar
-                    </a>
-                </div>
-            </div>  
+    ?>
+    <div class="row p-3">
+        <label for="name" class="col-2 col-form-label">
+            Nombre
+        </label>
+        <div class="col-10">
+            <input type="text" class="form-control" name="name" id="name" placeholder="Nombre">
         </div>
-        
-            <?php
-//                for ($i = 0; $i<sizeof($restaurantes); $i++){
-//                    echo $restaurantes[$i]->pintarRestaurante();
-//                }
-            ?>
     </div>
-</div>
+    <div class="row p-3">
+        <label for="cover" class="col-2 col-form-label">URL Imagen</label>
+        <div class="col-10">
+            <input type="text" class="form-control" id="picture" name="picture" placeholder="Picture">
+        </div>
+    </div>
+    <div class="row p-3">
+        <label for="menu" class="col-2 col-form-label">Menu</label>
+        <div class="col-10">
+            <textarea class="form-control" id="menu" name="menu" style="height: 100px" placeholder="menu"></textarea>
+        </div>
+    </div>
+    <div class="row p-3">
+        <label for="minorprice" class="col-2 col-form-label">Precio Mínimo</label>
+        <div class="col-10">
+            <input type="text" class="form-control" id="minorprice" name="minorprice" placeholder="Minor Price">
+        </div>
+    </div>
+    <div class="row p-3">
+        <label for="mayorprice" class="col-2 col-form-label">Precio Máximo</label>
+        <div class="col-10">
+            <input type="text" class="form-control" id="mayorprice" name="mayorprice" placeholder="Mayor Price">
+        </div>
+    </div>
+    <div class="row p-3">
+        <div class="col-12 text-center">
+            <button type="submit" class="btn btn-success" id="boton_crear">Crear</button>
+        </div>
+    </div>
+</form>
+<!-- FIN DEL FORMULARIO  -->
 
-<footer class="footer">
-    <div class="">
-        <span class=""> Cuatrovientos </span>
-    </div>
+<footer class="">
+    Cuatrovientos
 </footer>
 
-<!-- JS Scripts -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 </body>
 
 </html>
-
-
-
