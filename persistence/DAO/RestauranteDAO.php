@@ -56,4 +56,20 @@ class RestauranteDAO {
         return $stmt->execute();
     }
     
+    public function update($restaurante) {
+        $query = "UPDATE " . RestauranteDAO::RESTAURANTE_TABLE .
+                " SET name=?, image=?, menu=?, minorprice=?, mayorprice=?"
+                . " WHERE id=?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        $name = $restaurante->getName();
+        $image = $restaurante->getImage();
+        $menu = $restaurante->getMenu();
+        $minorprice = $restaurante->getMinorprice();
+        $mayorprice = $restaurante->getMayorprice();
+        $id = $restaurante->getId();
+        
+        mysqli_stmt_bind_param($stmt, "sssdds", $name, $image, $menu, $minorprice, $mayorprice, $id);
+        return $stmt->execute();        
+    }
+    
 }

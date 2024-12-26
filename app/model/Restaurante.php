@@ -70,7 +70,7 @@ class Restaurante {
             $result .= '<p class="card-text">'.$this->getMenu().'</p>';
             $result .= '</div>';
             $result .= '<div class="card-footer d-flex justify-content-around">';
-            $result .= '<form action="../../views/private/restaurante/modificar.php" method="post">';
+            $result .= '<form action="../../views/private/modificar.php" method="post">';
             $result .= '<input type="hidden" name="type" value="modificar">';
             $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';
             $result .= '<button type="submit" class="btn btn-warning" name="modificar" id="boton_modificar">Editar</button>';

@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $restauranteController->createAction();
     }elseif ($_POST["type"] == "borrar") {
         $restauranteController->deleteAction();
+    }elseif ($_POST["type"] == "editar"){
+        $restauranteController->editAction();
     }
 }
 
@@ -65,7 +67,53 @@ class RestauranteController {
     }
     
     function deleteAction() {
-        // Comprobamos que recibimos el id correctamente
+        $id = $this->comprobarID();
+        
+        $restauranteDAO = new RestauranteDAO();
+        $restauranteDAO->delete($id);
+        
+        header('Location: ../views/public/index.php');
+    }
+    
+    function editAction() {
+        $id = $this->comprobarID();
+        // Obtención de los valores del formulario y validación
+        $name = ValidationRules::test_input($_POST["name"]);
+        $isUrl = ValidationRules::validate_url($_POST["picture"]);
+        $menu = ValidationRules::test_input($_POST["menu"]);
+        $minorprice = ValidationRules::test_input($_POST["minorprice"]);
+        $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
+        
+        if($isUrl==true){
+            $image = ValidationRules::test_input($_POST["picture"]);
+            
+            if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
+                echo "<p>Todos los campos deben estar completos</p>";
+                header('Location: ../views/private/modificar.php?error=Todos los campos deben estar completos');
+            }
+            else{
+                // Creación de objeto auxiliar   
+                $restaurante = new Restaurante();
+                $restaurante->setId($id);
+                $restaurante->setName($name);
+                $restaurante->setImage($image);
+                $restaurante->setMenu($menu);
+                $restaurante->setMinorprice($minorprice);
+                $restaurante->setMayorprice($mayorprice);
+                //Creamos un objeto CreatureDAO para hacer las llamadas a la BD
+                $restauranteDAO = new RestauranteDAO();
+                $restauranteDAO->update($restaurante);
+
+                header('Location: ../views/public/index.php');
+            }
+        }else{
+            echo "<p>El campo image debe ser una URL</p>";
+            header('Location: ../views/private/modificar.php?error=El campo image debe ser una URL');
+        }
+        
+    }
+    
+    function comprobarID() {
         if (isset($_POST["id"])) {
             $id = $_POST["id"]; // Obtenemos el id del registro
             
@@ -75,9 +123,6 @@ class RestauranteController {
             return;
         }
         
-        $restauranteDAO = new RestauranteDAO();
-        $restauranteDAO->delete($id);
-        
-        header('Location: ../views/public/index.php');
+        return $id;
     }
 }
