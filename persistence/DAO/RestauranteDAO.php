@@ -34,4 +34,18 @@ class RestauranteDAO {
         return $restaurantes;
     }
     
+    public function insert($restaurante) {
+        $query = "INSERT INTO " . RestauranteDAO::RESTAURANTE_TABLE . 
+                " (name, image, menu, minorprice, mayorprice) VALUES(?,?,?,?,?)";
+        $stmt = mysqli_prepare($this->conn, $query);
+        $name = $restaurante->getName();
+        $image = $restaurante->getImage();
+        $menu = $restaurante->getMenu();
+        $minorprice = $restaurante->getMinorprice();
+        $mayorprice = $restaurante->getMayorprice();
+        
+        mysqli_stmt_bind_param($stmt, "sssdd", $name, $image, $menu, $minorprice, $mayorprice);
+        return $stmt->execute();        
+    }
+    
 }

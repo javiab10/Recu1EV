@@ -40,7 +40,7 @@
 </nav>
 
 <!-- FORMULARIO DE INSERCIÓN -->
-<form class="container" method="post" action="../../../controllers/RestauranteController.php">
+<form class="container" method="post" action="../../controllers/RestauranteController.php">
     <input type="hidden" id="type" name="type" value="create">
     <?php
         if (isset($_GET['error'])) {
