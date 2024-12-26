@@ -1,4 +1,10 @@
 <?php
+require_once '../../model/Restaurante.php';
+require_once '../../controllers/RestauranteController.php';
+
+$restauranteControllre = new RestauranteController();
+$restaurantes = $restauranteControllre->readAction();
+
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +49,7 @@
 </nav>
 
 <!-- Page Content -->
-<div class="container-fluid bg-info mb-5">
+<div class="container-fluid bg-info">
     <div class="row py-2">
         <div class="col-md-3">
             <img class="img-fluid rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3-amGm2gh_xVI1MX5PrKVbpUN_mxFim5RoA&s" alt="">
@@ -60,9 +66,9 @@
 </div>
 
 <!-- Content Row -->
-<div class="container mtop-5">
+<div class="container">
     <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 mb-5">
+        <div class="col-12 col-md-6 col-lg-4 mt-5">
             <div class="card h-100">
                 <img class="card-img-top"
                 src="https://res.cloudinary.com/tf-lab/image/upload/w_600,h_337,c_fill,g_auto:subject,q_auto,f_auto/restaurant/9ca6ab00-5644-45a4-90fc-c27464818e98/baae3255-f0dd-414e-a0d7-deaa76a00e32.jpg"
@@ -86,9 +92,9 @@
         </div>
         
             <?php
-//                for ($i = 0; $i<sizeof($restaurantes); $i++){
-//                    echo $restaurantes[$i]->pintarRestaurante();
-//                }
+                for ($i = 0; $i<sizeof($restaurantes); $i++){
+                    echo $restaurantes[$i]->pintarRestaurante();
+                }
             ?>
     </div>
 </div>

@@ -4,7 +4,7 @@ class Restaurante {
     private $id;
     private $name;
     private $image;
-    private $manu;
+    private $menu;
     private $minorprice;
     private $mayorprice;
     
@@ -24,8 +24,8 @@ class Restaurante {
         return $this->image;
     }
 
-    public function getManu() {
-        return $this->manu;
+    public function getMenu() {
+        return $this->menu;
     }
 
     public function getMinorprice() {
@@ -48,8 +48,8 @@ class Restaurante {
         $this->image = $image;
     }
 
-    public function setManu($manu): void {
-        $this->manu = $manu;
+    public function setMenu($manu): void {
+        $this->menu = $manu;
     }
 
     public function setMinorprice($minorprice): void {
@@ -61,7 +61,7 @@ class Restaurante {
     }
     
     function pintarRestaurante(){
-            $result = '<div class="col-12 col-md-6 col-lg-4">';
+            $result = '<div class="col-12 col-md-6 col-lg-4 mt-5">';
             $result .= '<div class="card h-100">';
             $result .= '<img class="card-img-top" src="'.$this->getImage().'"alt="Card image cap">';
             $result .= '<div class="card-body">';

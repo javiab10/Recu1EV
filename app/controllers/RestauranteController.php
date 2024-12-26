@@ -1,15 +1,16 @@
 <?php
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
- */
+require_once(dirname(__FILE__) . '/../../persistence/DAO/RestauranteDAO.php');
 
-/**
- * Description of RestauranteController
- *
- * @author azpij
- */
 class RestauranteController {
-    //put your code here
+    
+    public function __construct(){
+        
+    }
+    
+    // Obtención de la lista completa de restaurantes
+    function readAction() {
+        $restauranteDAO = new RestauranteDAO();
+        return $restauranteDAO->selectAll();
+    }
 }
