@@ -9,7 +9,9 @@ $restauranteController = new RestauranteController();
 //Recibimos los datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST["type"] == "create"){
-    $restauranteController->createAction();
+        $restauranteController->createAction();
+    }elseif ($_POST["type"] == "borrar") {
+        $restauranteController->deleteAction();
     }
 }
 
@@ -60,5 +62,22 @@ class RestauranteController {
             header('Location: ../views/private/insertar.php?error=El campo image debe ser una URL');
         }
         
+    }
+    
+    function deleteAction() {
+        // Comprobamos que recibimos el id correctamente
+        if (isset($_POST["id"])) {
+            $id = $_POST["id"]; // Obtenemos el id del registro
+            
+        } else {
+            // Si no se encuentra el id en el Post
+            echo "El ID no se ha recibido correctamente.";
+            return;
+        }
+        
+        $restauranteDAO = new RestauranteDAO();
+        $restauranteDAO->delete($id);
+        
+        header('Location: ../views/public/index.php');
     }
 }

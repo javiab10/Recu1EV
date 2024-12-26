@@ -48,4 +48,12 @@ class RestauranteDAO {
         return $stmt->execute();        
     }
     
+    public function delete($id) {
+        $query = "DELETE FROM " . RestauranteDAO::RESTAURANTE_TABLE . " WHERE id = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        
+        mysqli_stmt_bind_param($stmt, "i", $id);
+        return $stmt->execute();
+    }
+    
 }
