@@ -111,4 +111,15 @@ class RestauranteDAO {
         return $restaurantes;
     }
     
+    public function fetchCategory($category){
+        $query = "SELECT id FROM ".self::CATEGORY_TABLE
+                . " WHERE name = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt,"s", $category);
+        
+        mysqli_stmt_execute($stmt);
+        return $stmt->execute();
+        
+    }
+    
 }

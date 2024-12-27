@@ -30,6 +30,7 @@ class RestauranteController {
     }
     
     function createAction() {
+        $restauranteDAO = new RestauranteDAO();
         
         // Obtención de los valores del formulario y validación
         $name = ValidationRules::test_input($_POST["name"]);
@@ -37,6 +38,7 @@ class RestauranteController {
         $menu = ValidationRules::test_input($_POST["menu"]);
         $minorprice = ValidationRules::test_input($_POST["minorprice"]);
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
+        $idCategory = $restauranteDAO->fetchCategory($_POST["category"]);
         
         if($isUrl==true){
             $image = ValidationRules::test_input($_POST["picture"]);
@@ -53,8 +55,8 @@ class RestauranteController {
                 $restaurante->setMenu($menu);
                 $restaurante->setMinorprice($minorprice);
                 $restaurante->setMayorprice($mayorprice);
+                $restaurante->setIdCategory($idCategory);
                 //Creamos un objeto CreatureDAO para hacer las llamadas a la BD
-                $restauranteDAO = new RestauranteDAO();
                 $restauranteDAO->insert($restaurante);
 
                 header('Location: ../views/public/index.php');
@@ -76,6 +78,7 @@ class RestauranteController {
     }
     
     function editAction() {
+        $restauranteDAO = new RestauranteDAO();
         $id = $this->comprobarID();
         // Obtención de los valores del formulario y validación
         $name = ValidationRules::test_input($_POST["name"]);
@@ -83,6 +86,7 @@ class RestauranteController {
         $menu = ValidationRules::test_input($_POST["menu"]);
         $minorprice = ValidationRules::test_input($_POST["minorprice"]);
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
+        $idCategory = $restauranteDAO->fetchCategory($_POST["category"]);
         
         if($isUrl==true){
             $image = ValidationRules::test_input($_POST["picture"]);
@@ -99,9 +103,9 @@ class RestauranteController {
                 $restaurante->setImage($image);
                 $restaurante->setMenu($menu);
                 $restaurante->setMinorprice($minorprice);
-                $restaurante->setMayorprice($mayorprice);
+                $restaurante->setMayorprice($mayorprice);                
+                $restaurante->setIdCategory($idCategory);
                 //Creamos un objeto CreatureDAO para hacer las llamadas a la BD
-                $restauranteDAO = new RestauranteDAO();
                 $restauranteDAO->update($restaurante);
 
                 header('Location: ../views/public/index.php');
