@@ -2,8 +2,18 @@
 require_once '../../model/Restaurante.php';
 require_once '../../controllers/RestauranteController.php';
 
-$restauranteControllre = new RestauranteController();
-$restaurantes = $restauranteControllre->readAction();
+$categoryRestaurantes = null;
+
+if (isset($_GET["buscador"])) {
+    $categoryRestaurantes = $restauranteController->readCategory($_GET["buscador"]);
+    if($categoryRestaurantes == null){
+        echo "no hay resultados";
+    }
+}
+    
+$restauranteController = new RestauranteController();
+$restaurantes = $restauranteController->readAction();
+
 
 ?>
 
@@ -57,8 +67,8 @@ $restaurantes = $restauranteControllre->readAction();
         <div class="col">
             <h1 class="display-3">Descubra y reserva el mejor restaurante</h1>
             <p class="lead">una aplicación de 4Vientos.</p>
-            <form class="input-group">
-                <input name="buscador" class="form-control" />
+            <form class="input-group" method="get">
+                <input id="buscador" name="buscador" class="form-control"/>
                 <button class="btn btn-primary" type="submit" >Buscar</button>
             </form>
         </div>
@@ -91,11 +101,20 @@ $restaurantes = $restauranteControllre->readAction();
             </div>  
         </div>
         
-            <?php
-                for ($i = 0; $i<sizeof($restaurantes); $i++){
-                    echo $restaurantes[$i]->pintarRestaurante();
+        <?php
+            
+            if($categoryRestaurantes != null){
+                foreach ($categoryRestaurantes as $restaurante){
+                    echo $restaurante->pintarRestaurante();
                 }
-            ?>
+            }else{
+                foreach ($restaurantes as $restaurante){
+                    echo $restaurante->pintarRestaurante();
+                }
+            }
+            
+            
+        ?> 
     </div>
 </div>
 

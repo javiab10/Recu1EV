@@ -7,6 +7,7 @@ class Restaurante {
     private $menu;
     private $minorprice;
     private $mayorprice;
+    private $idCategory;
     
     public function __construct() {
         
@@ -35,6 +36,10 @@ class Restaurante {
     public function getMayorprice() {
         return $this->mayorprice;
     }
+    
+    public function getIdCategory() {
+        return $this->idCategory;
+    }
 
     public function setId($id): void {
         $this->id = $id;
@@ -58,6 +63,10 @@ class Restaurante {
 
     public function setMayorprice($mayorprice): void {
         $this->mayorprice = $mayorprice;
+    }
+    
+    public function setIdCategory($idCategory): void {
+        $this->idCategory = $idCategory;
     }
     
     function pintarRestaurante(){

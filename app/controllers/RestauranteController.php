@@ -125,4 +125,10 @@ class RestauranteController {
         
         return $id;
     }
+    
+    function readCategory($category){
+        $nameCategory = ValidationRules::test_input($category);
+        $restauranteDAO = new RestauranteDAO();
+        return $restauranteDAO->selectCategory($nameCategory);
+    }
 }
