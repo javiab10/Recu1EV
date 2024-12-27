@@ -87,7 +87,7 @@ class RestauranteDAO {
                 . " FROM " . self::RESTAURANTE_TABLE. " AS r"  
                 . " JOIN ". self::CATEGORY_TABLE. " AS c"
                 . " ON r.idCategory = c.id"
-                . " WHERE c.name = ?";
+                . " WHERE LOWER(c.name) = LOWER(?)";
         $stmt = mysqli_prepare($this->conn, $query);
         mysqli_stmt_bind_param($stmt,"s", $nameCategory);
         
