@@ -79,6 +79,11 @@ class Restaurante {
             $result .= '<p class="card-text">'.$this->getMenu().'</p>';
             $result .= '</div>';
             $result .= '<div class="card-footer d-flex justify-content-around">';
+            $result .= '<form action="../../views/public/reservar.php" method="post">';
+            $result .= '<input type="hidden" name="type" value="reserve">';
+            $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';
+            $result .= '<button type="submit" class="btn btn-success" name="reservar" id="boton_reservar">Reservar</button>';
+            $result .= '</form>';
             $result .= '<form action="../../views/private/modificar.php" method="post">';
             $result .= '<input type="hidden" name="type" value="modificar">';
             $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';

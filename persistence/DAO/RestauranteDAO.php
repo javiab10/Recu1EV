@@ -7,6 +7,7 @@ class RestauranteDAO {
     //Se define una constante con el nombre de la tabla
     const RESTAURANTE_TABLE = 'restaurant';
     const CATEGORY_TABLE = 'category';
+    const RESERVE_TABLE = 'reserve';
 
     //Conexión a BD
     private $conn = null;
@@ -38,15 +39,16 @@ class RestauranteDAO {
     
     public function insert($restaurante) {
         $query = "INSERT INTO " . self::RESTAURANTE_TABLE . 
-                " (name, image, menu, minorprice, mayorprice) VALUES(?,?,?,?,?)";
+                " (name, image, menu, minorprice, mayorprice, idCategory) VALUES(?,?,?,?,?,?)";
         $stmt = mysqli_prepare($this->conn, $query);
         $name = $restaurante->getName();
         $image = $restaurante->getImage();
         $menu = $restaurante->getMenu();
         $minorprice = $restaurante->getMinorprice();
         $mayorprice = $restaurante->getMayorprice();
+        $idCategory = $restaurante->getIdCategory();
         
-        mysqli_stmt_bind_param($stmt, "sssdd", $name, $image, $menu, $minorprice, $mayorprice);
+        mysqli_stmt_bind_param($stmt, "sssddi", $name, $image, $menu, $minorprice, $mayorprice, $idCategory);
         return $stmt->execute();        
     }
     
@@ -60,7 +62,7 @@ class RestauranteDAO {
     
     public function update($restaurante) {
         $query = "UPDATE " . self::RESTAURANTE_TABLE .
-                " SET name=?, image=?, menu=?, minorprice=?, mayorprice=?"
+                " SET name=?, image=?, menu=?, minorprice=?, mayorprice=?, idCategory=?"
                 . " WHERE id=?";
         $stmt = mysqli_prepare($this->conn, $query);
         $name = $restaurante->getName();
@@ -68,9 +70,10 @@ class RestauranteDAO {
         $menu = $restaurante->getMenu();
         $minorprice = $restaurante->getMinorprice();
         $mayorprice = $restaurante->getMayorprice();
+        $idCategory = $restaurante->getIdCategory();
         $id = $restaurante->getId();
         
-        mysqli_stmt_bind_param($stmt, "sssdds", $name, $image, $menu, $minorprice, $mayorprice, $id);
+        mysqli_stmt_bind_param($stmt, "sssddii", $name, $image, $menu, $minorprice, $mayorprice, $idCategory, $id);
         return $stmt->execute();        
     }
     
@@ -111,11 +114,11 @@ class RestauranteDAO {
         return $restaurantes;
     }
     
-    public function fetchCategory($category){
+    public function fetchCategoryByName($name){
         $query = "SELECT id FROM ".self::CATEGORY_TABLE
                 . " WHERE name = ?";
         $stmt = mysqli_prepare($this->conn, $query);
-        mysqli_stmt_bind_param($stmt,"s", $category);
+        mysqli_stmt_bind_param($stmt,"s", $name);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         
@@ -125,6 +128,35 @@ class RestauranteDAO {
         } else {
             return null;
         }
+    }
+    
+    public function fetchRestaurantNameById($id){
+        $query = "SELECT name FROM ".self::RESTAURANTE_TABLE
+                . " WHERE id = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt,"i", $id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result); 
+            return $row['name']; 
+        } else {
+            return null;
+        }
+    }
+    
+    public function reserve($reserve){
+        $query = "INSERT INTO " . self::RESERVE_TABLE. 
+                " (id_restaurant, date, persons, IP) VALUES(?,?,?,?)";
+        $stmt = mysqli_prepare($this->conn, $query);
+        $id_restaurant = $reserve->getId_restaurant();
+        $date = $reserve->getDate();
+        $persons = $reserve->getPersons();
+        $IP = $reserve->getIP();
+                
+        mysqli_stmt_bind_param($stmt, "isis", $id_restaurant, $date, $persons, $IP);
+        return $stmt->execute();        
     }
     
 }

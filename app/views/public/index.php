@@ -5,7 +5,7 @@ require_once '../../controllers/RestauranteController.php';
 $categoryRestaurantes = null;
 
 if (isset($_GET["buscador"])) {
-    $categoryRestaurantes = $restauranteController->readCategory($_GET["buscador"]);
+    $categoryRestaurantes = $restauranteController->fetchCategoryByName($_GET["buscador"]);
     if($categoryRestaurantes == null){
         echo "no hay resultados";
     }

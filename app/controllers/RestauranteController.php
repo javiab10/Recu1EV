@@ -3,17 +3,21 @@
 require_once(dirname(__FILE__) . '/../../persistence/DAO/RestauranteDAO.php');
 require_once(dirname(__FILE__) . '/../model/validations/ValidationRules.php');
 require_once(dirname(__FILE__) . '/../model/Restaurante.php');
+require_once(dirname(__FILE__) . '/../model/Reserva.php');
+
 
 $restauranteController = new RestauranteController();
 
 //Recibimos los datos del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if ($_POST["type"] == "create"){
+    if ($_POST["type"] == "create") {
         $restauranteController->createAction();
     }elseif ($_POST["type"] == "borrar") {
         $restauranteController->deleteAction();
-    }elseif ($_POST["type"] == "editar"){
+    }elseif ($_POST["type"] == "editar") {
         $restauranteController->editAction();
+    }elseif ($_POST["type"] == "reservar") {
+        $restauranteController->createReserve();
     }
 }
 
@@ -37,7 +41,7 @@ class RestauranteController {
         $menu = ValidationRules::test_input($_POST["menu"]);
         $minorprice = ValidationRules::test_input($_POST["minorprice"]);
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
-        $idCategory = $restauranteDAO->fetchCategory($_POST["category"]);
+        $idCategory = $restauranteDAO->fetchCategoryByName($_POST["category"]);
         
         if($idCategory == null){
             self::redirectWithError("Categoría de Restaurante no válida");
@@ -62,7 +66,7 @@ class RestauranteController {
     }
     
     function deleteAction() {
-        $id = $this->comprobarID();
+        $id = $this->checkID();
         
         $restauranteDAO = new RestauranteDAO();
         $restauranteDAO->delete($id);
@@ -72,14 +76,14 @@ class RestauranteController {
     
     function editAction() {
         $restauranteDAO = new RestauranteDAO();
-        $id = $this->comprobarID();
+        $id = $this->checkID();
         // Obtención de los valores del formulario y validación
         $name = ValidationRules::test_input($_POST["name"]);
         $isUrl = ValidationRules::validate_url($_POST["picture"]);
         $menu = ValidationRules::test_input($_POST["menu"]);
         $minorprice = ValidationRules::test_input($_POST["minorprice"]);
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
-        $idCategory = $restauranteDAO->fetchCategory($_POST["category"]);
+        $idCategory = $restauranteDAO->fetchCategoryByName($_POST["category"]);
         
         if($idCategory == null){
             self::redirectWithError("Categoría de Restaurante no válida");
@@ -121,7 +125,7 @@ class RestauranteController {
         header('Location: ../views/private/modificar.php?error='. urldecode($message));
     }
     
-    function comprobarID() {
+    function checkID() {
         if (isset($_POST["id"])) {
             $id = $_POST["id"]; // Obtenemos el id del registro
             
@@ -134,9 +138,31 @@ class RestauranteController {
         return $id;
     }
     
-    function readCategory($category){
-        $nameCategory = ValidationRules::test_input($category);
+    function fetchCategoryByName($name){
+        $nameCategory = ValidationRules::test_input($name);
         $restauranteDAO = new RestauranteDAO();
         return $restauranteDAO->selectCategory($nameCategory);
+    }
+    
+    function fetchRestaurantById($id){
+        $restauranteDAO = new RestauranteDAO();
+        return $restauranteDAO->fetchRestaurantNameById($id);
+    }
+    
+    function createReserve(){
+        $restauranteDAO = new RestauranteDAO();
+        $id_restaurant = $this->checkID();
+        $date = $_POST["fecha"] ." ". $_POST["hora"];
+        $persons = $_POST["comensales"];
+        $IP = $_SERVER['REMOTE_ADDR'];
+        
+        $reserve = new Reserva();
+        $reserve->setId_restaurant($id_restaurant);
+        $reserve->setDate($date);
+        $reserve->setPersons($persons);
+        $reserve->setIP($IP);
+        $restauranteDAO->reserve($reserve);
+        
+        header('Location: ../views/public/index.php');
     }
 }
