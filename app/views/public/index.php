@@ -78,28 +78,6 @@ $restaurantes = $restauranteController->readAction();
 <!-- Content Row -->
 <div class="container">
     <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 mt-5">
-            <div class="card h-100">
-                <img class="card-img-top"
-                src="https://res.cloudinary.com/tf-lab/image/upload/w_600,h_337,c_fill,g_auto:subject,q_auto,f_auto/restaurant/9ca6ab00-5644-45a4-90fc-c27464818e98/baae3255-f0dd-414e-a0d7-deaa76a00e32.jpg"
-                alt="Card image cap">
-                <div class="card-body">
-                    <span class="badge bg-primary">20-30 €</span>
-                    <h4 class="card-title">La Tagliatella Iruña</h4>
-                    <p class="card-text">
-                        Risotto Magret y tartufina
-                    </p>
-                </div>
-                <div class="card-footer d-flex justify-content-around">
-                    <a href="#" class="btn btn-warning">
-                        Editar
-                    </a>
-                    <a href="#" class="btn btn-danger">
-                        Borrar
-                    </a>
-                </div>
-            </div>  
-        </div>
         
         <?php
             

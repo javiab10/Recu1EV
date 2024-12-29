@@ -86,6 +86,17 @@
         </div>
     </div>
     <div class="row p-3">
+        <label for="category" class="col-2 col-form-label">Categoría</label>
+        <div class="col-10">
+            <select class="form-select" id="category" name="category" >
+                <option selected>Selecciona una Categoría</option>
+                <option value="Italiano">Italiano</option>
+                <option value="Chino">Chino</option>
+                <option value="Navarro">Navarro</option>
+            </select>
+        </div>
+    </div>
+    <div class="row p-3">
         <div class="col-12 text-center">
             <button type="submit" class="btn btn-success" id="btn_modificar">Modificar</button>
         </div>

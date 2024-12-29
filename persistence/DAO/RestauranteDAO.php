@@ -116,10 +116,15 @@ class RestauranteDAO {
                 . " WHERE name = ?";
         $stmt = mysqli_prepare($this->conn, $query);
         mysqli_stmt_bind_param($stmt,"s", $category);
-        
         mysqli_stmt_execute($stmt);
-        return $stmt->execute();
+        $result = mysqli_stmt_get_result($stmt);
         
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result); 
+            return $row['id']; 
+        } else {
+            return null;
+        }
     }
     
 }

@@ -39,6 +39,10 @@ class RestauranteController {
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
         $idCategory = $restauranteDAO->fetchCategory($_POST["category"]);
         
+        if($idCategory == null){
+            self::redirectWithError("Categoría de Restaurante no válida");
+        }
+        
         if(!$isUrl){
             self::redirectWithError("El campo image debe ser una URL");
         }
