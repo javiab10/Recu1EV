@@ -30,8 +30,7 @@ class RestauranteController {
     }
     
     function createAction() {
-        $restauranteDAO = new RestauranteDAO();
-        
+        $restauranteDAO = new RestauranteDAO();        
         // Obtención de los valores del formulario y validación
         $name = ValidationRules::test_input($_POST["name"]);
         $isUrl = ValidationRules::validate_url($_POST["picture"]);
@@ -40,31 +39,21 @@ class RestauranteController {
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
         $idCategory = $restauranteDAO->fetchCategory($_POST["category"]);
         
-        if($isUrl==true){
-            $image = ValidationRules::test_input($_POST["picture"]);
-            
-            if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
-                echo "<p>Todos los campos deben estar completos</p>";
-                header('Location: ../views/private/insertar.php?error=Todos los campos deben estar completos');
-            }
-            else{
-                // Creación de objeto auxiliar   
-                $restaurante = new Restaurante();
-                $restaurante->setName($name);
-                $restaurante->setImage($image);
-                $restaurante->setMenu($menu);
-                $restaurante->setMinorprice($minorprice);
-                $restaurante->setMayorprice($mayorprice);
-                $restaurante->setIdCategory($idCategory);
-                //Creamos un objeto CreatureDAO para hacer las llamadas a la BD
-                $restauranteDAO->insert($restaurante);
-
-                header('Location: ../views/public/index.php');
-            }
-        }else{
-            echo "<p>El campo image debe ser una URL</p>";
-            header('Location: ../views/private/insertar.php?error=El campo image debe ser una URL');
+        if(!$isUrl){
+            self::redirectWithError("El campo image debe ser una URL");
         }
+        
+        $image = ValidationRules::test_input($_POST["picture"]);
+        if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
+            self::redirectWithError("Todos los campos deben estar completos");
+        }
+        
+        // Creamos el objeto auxiliar y lo llenamos con sus atributos   
+        $restaurante = self::createRestaurante($name, $image, $menu, $minorprice, $mayorprice, $idCategory);
+        //Creamos un objeto RestauranteDAO para hacer las llamadas a la BD
+        $restauranteDAO->insert($restaurante);
+
+        header('Location: ../views/public/index.php');
         
     }
     
@@ -88,33 +77,44 @@ class RestauranteController {
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
         $idCategory = $restauranteDAO->fetchCategory($_POST["category"]);
         
-        if($isUrl==true){
-            $image = ValidationRules::test_input($_POST["picture"]);
-            
-            if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
-                echo "<p>Todos los campos deben estar completos</p>";
-                header('Location: ../views/private/modificar.php?error=Todos los campos deben estar completos');
-            }
-            else{
-                // Creación de objeto auxiliar   
-                $restaurante = new Restaurante();
-                $restaurante->setId($id);
-                $restaurante->setName($name);
-                $restaurante->setImage($image);
-                $restaurante->setMenu($menu);
-                $restaurante->setMinorprice($minorprice);
-                $restaurante->setMayorprice($mayorprice);                
-                $restaurante->setIdCategory($idCategory);
-                //Creamos un objeto CreatureDAO para hacer las llamadas a la BD
-                $restauranteDAO->update($restaurante);
-
-                header('Location: ../views/public/index.php');
-            }
-        }else{
-            echo "<p>El campo image debe ser una URL</p>";
-            header('Location: ../views/private/modificar.php?error=El campo image debe ser una URL');
+        if($idCategory == null){
+            self::redirectWithError("Categoría de Restaurante no válida");
         }
         
+        if(!$isUrl){
+            self::redirectWithError("El campo image debe ser una URL");
+        }
+            
+        $image = ValidationRules::test_input($_POST["picture"]);
+        if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
+            self::redirectWithError("Todos los campos deben estar completos");
+        }
+        
+        // Creamos el objeto auxiliar y lo llenamos con sus atributos 
+        $restaurante = self::createRestaurante($name, $image, $menu, $minorprice, $mayorprice, $idCategory);
+        // Establecemos el id
+        $restaurante->setId($id);
+        //Usamos el objeto RestauranteDAO para hacer las llamadas a la BD
+        $restauranteDAO->update($restaurante);
+
+        header('Location: ../views/public/index.php');
+        
+    }
+    
+    static function createRestaurante($name, $image, $menu, $minorprice, $mayorprice, $idCategory) {
+        $restaurante = new Restaurante();
+        $restaurante->setName($name);
+        $restaurante->setImage($image);
+        $restaurante->setMenu($menu);
+        $restaurante->setMinorprice($minorprice);
+        $restaurante->setMayorprice($mayorprice);
+        $restaurante->setIdCategory($idCategory);
+        return $restaurante;
+    }
+    
+    static function redirectWithError($message){
+        echo "<p>".$message."</p>";
+        header('Location: ../views/private/modificar.php?error='. urldecode($message));
     }
     
     function comprobarID() {

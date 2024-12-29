@@ -66,7 +66,7 @@ $restaurantes = $restauranteController->readAction();
         </div>
         <div class="col">
             <h1 class="display-3">Descubra y reserva el mejor restaurante</h1>
-            <p class="lead">una aplicación de 4Vientos.</p>
+            <p class="lead mb-5">una aplicación de 4Vientos.</p>
             <form class="input-group" method="get">
                 <input id="buscador" name="buscador" class="form-control"/>
                 <button class="btn btn-primary" type="submit" >Buscar</button>
