@@ -1,10 +1,8 @@
 <?php
 require_once (dirname(__FILE__).'../../../controllers/RestauranteController.php');
+
 $restauranteController = new RestauranteController();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "reserve") {
-    $id = $_POST["id"];
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,19 +47,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "reserve") {
 
 
 <!-- FORMULARIO DE INSERCIÓN --> 
-<h1 class="mt-4 display 2 text-center">Reservar en <?php echo $restauranteController->fetchRestaurantById($id)?></h1>
-<form class="container" method="post" action="../../controllers/RestauranteController.php">
+<form class="container" method="post" action="../../controllers/ReservaController.php">
     <input type="hidden" id="type" name="type" value="reservar">
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "reserve") {
             //Llamada que hace la edición en la BD
             $id=$_POST["id"];
             echo '<input type="hidden" name="id" value="'.$id.'">';
+            echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restauranteController->fetchRestaurantById($id).'</h1>';
         }
-
-//        if (isset($_GET['error'])) {
-//            echo "<p>{$_GET['error']}</p>";
-//        }
+        
+        if (isset($_GET['error'])) {
+            $id = $_GET['id'];
+            echo "<p>{$_GET['error']}</p>";
+            echo '<input type="hidden" name="id" value="'.$id.'">';
+            echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restauranteController->fetchRestaurantById($id).'</h1>';
+        }
     ?>
     <div class="row p-3 justify-content-center">
         <label for="comensales" class="col-2 col-form-label">Comensales</label>

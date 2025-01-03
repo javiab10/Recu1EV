@@ -14,7 +14,6 @@ if (isset($_GET["buscador"])) {
 $restauranteController = new RestauranteController();
 $restaurantes = $restauranteController->readAction();
 
-
 ?>
 
 <!DOCTYPE html>
@@ -90,7 +89,6 @@ $restaurantes = $restauranteController->readAction();
                     echo $restaurante->pintarRestaurante();
                 }
             }
-            
             
         ?> 
     </div>

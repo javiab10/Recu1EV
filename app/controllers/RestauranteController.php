@@ -5,7 +5,6 @@ require_once(dirname(__FILE__) . '/../model/validations/ValidationRules.php');
 require_once(dirname(__FILE__) . '/../model/Restaurante.php');
 require_once(dirname(__FILE__) . '/../model/Reserva.php');
 
-
 $restauranteController = new RestauranteController();
 
 //Recibimos los datos del formulario
@@ -16,12 +15,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $restauranteController->deleteAction();
     }elseif ($_POST["type"] == "editar") {
         $restauranteController->editAction();
-    }elseif ($_POST["type"] == "reservar") {
-        $restauranteController->createReserve();
     }
 }
 
 class RestauranteController {
+    const toMainPage = "Location: ../views/public/index.php";
+    const toInsertar = "Location: ../views/private/insertar.php";
+    const toModificar = "Location: ../views/private/modificar.php";
+    const msgCamposVacios = "?error=Todos los campos deben estar completos";
+    const msgURLNoValida = "?error=URL de imagen No válida";
+    const msgCategoriaNoValida = "?error=Categoría de Restaurante no válida";
     
     public function __construct(){
         
@@ -43,17 +46,17 @@ class RestauranteController {
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
         $idCategory = $restauranteDAO->fetchCategoryByName($_POST["category"]);
         
-        if($idCategory == null){
-            self::redirectWithError("Categoría de Restaurante no válida");
+        $image = ValidationRules::test_input($_POST["picture"]);
+        if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
+            $this->redirectWithError(self::toInsertar, self::msgCamposVacios);
         }
         
         if(!$isUrl){
-            self::redirectWithError("El campo image debe ser una URL");
+            $this->redirectWithError(self::toInsertar, self::msgURLNoValida);
         }
         
-        $image = ValidationRules::test_input($_POST["picture"]);
-        if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
-            self::redirectWithError("Todos los campos deben estar completos");
+        if($idCategory == null){
+            $this->redirectWithError(self::toInsertar, self::msgCategoriaNoValida);
         }
         
         // Creamos el objeto auxiliar y lo llenamos con sus atributos   
@@ -61,7 +64,7 @@ class RestauranteController {
         //Creamos un objeto RestauranteDAO para hacer las llamadas a la BD
         $restauranteDAO->insert($restaurante);
 
-        header('Location: ../views/public/index.php');
+        header(self::toMainPage);
         
     }
     
@@ -71,7 +74,7 @@ class RestauranteController {
         $restauranteDAO = new RestauranteDAO();
         $restauranteDAO->delete($id);
         
-        header('Location: ../views/public/index.php');
+        header(self::toMainPage);
     }
     
     function editAction() {
@@ -84,18 +87,18 @@ class RestauranteController {
         $minorprice = ValidationRules::test_input($_POST["minorprice"]);
         $mayorprice = ValidationRules::test_input($_POST["mayorprice"]);
         $idCategory = $restauranteDAO->fetchCategoryByName($_POST["category"]);
-        
-        if($idCategory == null){
-            self::redirectWithError("Categoría de Restaurante no válida");
-        }
-        
-        if(!$isUrl){
-            self::redirectWithError("El campo image debe ser una URL");
-        }
             
         $image = ValidationRules::test_input($_POST["picture"]);
         if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
-            self::redirectWithError("Todos los campos deben estar completos");
+            $this->redirectWithError(self::toModificar, self::msgCamposVacios);
+        }
+        
+        if(!$isUrl){
+            $this->redirectWithError(self::toModificar, self::msgURLNoValida);
+        }
+        
+        if($idCategory == null){
+            $this->redirectWithError(self::toModificar, self::msgCategoriaNoValida);
         }
         
         // Creamos el objeto auxiliar y lo llenamos con sus atributos 
@@ -105,7 +108,7 @@ class RestauranteController {
         //Usamos el objeto RestauranteDAO para hacer las llamadas a la BD
         $restauranteDAO->update($restaurante);
 
-        header('Location: ../views/public/index.php');
+        header(self::toMainPage);
         
     }
     
@@ -120,12 +123,12 @@ class RestauranteController {
         return $restaurante;
     }
     
-    static function redirectWithError($message){
-        echo "<p>".$message."</p>";
-        header('Location: ../views/private/modificar.php?error='. urldecode($message));
+    public function redirectWithError($location, $message){
+        header($location . urldecode($message));
+        exit();
     }
     
-    function checkID() {
+    public function checkID() {
         if (isset($_POST["id"])) {
             $id = $_POST["id"]; // Obtenemos el id del registro
             
@@ -149,20 +152,4 @@ class RestauranteController {
         return $restauranteDAO->fetchRestaurantNameById($id);
     }
     
-    function createReserve(){
-        $restauranteDAO = new RestauranteDAO();
-        $id_restaurant = $this->checkID();
-        $date = $_POST["fecha"] ." ". $_POST["hora"];
-        $persons = $_POST["comensales"];
-        $IP = $_SERVER['REMOTE_ADDR'];
-        
-        $reserve = new Reserva();
-        $reserve->setId_restaurant($id_restaurant);
-        $reserve->setDate($date);
-        $reserve->setPersons($persons);
-        $reserve->setIP($IP);
-        $restauranteDAO->reserve($reserve);
-        
-        header('Location: ../views/public/index.php');
-    }
 }
