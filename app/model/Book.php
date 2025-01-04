@@ -42,9 +42,5 @@ class Book {
     public function setIP($IP): void {
         $this->IP = $IP;
     }
-
-
-
-
     
 }
