@@ -1,14 +1,30 @@
 <?php
 require_once '../../model/Restaurant.php';
 require_once '../../controllers/RestaurantController.php';
+require_once '../../controllers/UserController.php';
 
 $categoryRestaurantes = null;
 $restaurantController = new RestaurantController();
 
-if (isset($_GET["buscador"])) {
-    $categoryRestaurantes = $restaurantController->fetchCategoryByName($_GET["buscador"]);
-    if($categoryRestaurantes == null){
-        echo "no hay resultados";
+$isLogged = false;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "login"){
+    $email = $_POST["inputEmail"];
+    $password = $_POST["inputPass"];    
+}
+
+if($_SERVER["REQUEST_METHOD"] == "GET"){
+    if (isset($_GET["buscador"])) {
+        $categoryRestaurantes = $restaurantController->fetchCategoryByName($_GET["buscador"]);
+        if ($categoryRestaurantes == null) {
+            echo "no hay resultados";
+        }
+    }
+    
+    if (isset($_GET["logged"]) && $_GET["logged"] == "true") {
+        $isLogged = true;
+    }else{
+        $isLogged = false;
     }
 }
     
@@ -46,13 +62,35 @@ $restaurants = $restaurantController->readAction();
                     <a class="nav-link" aria-current="page" href="../private/insert.php" id="nuevo_restaurante">Nuevo Restaurante</a>
                 </li>
             </ul>
-            <div class="d-flex" id="form-login">
-                <input class="form-control" type="text" placeholder="User" aria-label="User" id="input-login">
-                <input class="form-control" type="password" placeholder="Password" aria-label="Password" id="input-pass">
-                <button class="btn btn-outline-success d-flex align-items-center" type="submit" id="btn-login">
-                    <i class="bi bi-door-open px-1"></i> Acceder
-                </button>
-            </div>
+            
+            <?php 
+                if (!$isLogged){
+                    echo 
+                    '<div class="col-6 d-flex" id="form-login">'.
+                        '<form class="d-flex" method="post" action="../../controllers/UserController.php">'.
+                            '<input type="hidden" name="type" value="login">'.
+                            '<input class="form-control" type="text" placeholder="Email" name="inputEmail" id="inputEmail">'.
+                            '<input class="form-control" type="password" placeholder="Password" name="inputPass" id="inputPass">'.
+                            '<button class="btn btn-outline-success d-flex align-items-center" type="submit" id="btn-login">'.
+                                '<i class="bi bi-door-open px-1"></i> Acceder'.
+                            '</button>'.
+                        '</form>'.
+                    '</div>';
+                }else{
+                    echo
+                    '<div class="col-2 d-flex" id="form-login">'.
+                        '<form class="d-flex justify-cotent-around" method="post" action="../../controllers/UserController.php">'.
+                            '<label for="type" class="col-form-label me-2">Bienvenido</label>'. 
+                            '<input type="hidden" name="type" value="logout">'.
+                            '<button class="btn btn-outline-success d-flex align-items-center" type="submit" id="btn-login">'.
+                                '<i class="bi bi-door-open px-1"></i> Salir'.
+                            '</button>'.
+                        '</form>'.
+                    '</div>';
+                }                    
+                    
+            ?>
+            
         </div>
     </div>
 </nav>
