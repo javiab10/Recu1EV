@@ -69,35 +69,64 @@ class Restaurant {
         $this->idCategory = $idCategory;
     }
     
-    function drawRestaurant(){
-        $result = '<div class="col-12 col-md-6 col-lg-4 mt-5">';
-        $result .= '<div class="card h-100">';
-        $result .= '<img class="card-img-top" src="'.$this->getImage().'"alt="Card image cap">';
-        $result .= '<div class="card-body">';
-        $result .= '<span class="badge bg-primary">'.$this->getMinorprice().'-'.$this->getMayorprice().'</span>';
-        $result .= '<h4 class="card-title">'.$this->getName().'</h4>';
-        $result .= '<p class="card-text">'.$this->getMenu().'</p>';
-        $result .= '</div>';
-        $result .= '<div class="card-footer d-flex justify-content-around">';
-        $result .= '<form action="../../views/public/booking.php" method="post">';
-        $result .= '<input type="hidden" name="type" value="book">';
-        $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';
-        $result .= '<button type="submit" class="btn btn-success" name="book" id="btn_book">Reservar</button>';
-        $result .= '</form>';
-        $result .= '<form action="../../views/private/modify.php" method="post">';
-        $result .= '<input type="hidden" name="type" value="modify">';
-        $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';
-        $result .= '<button type="submit" class="btn btn-warning" name="modify" id="btn_modify">Editar</button>';
-        $result .= '</form>';
-        $result .= '<form action="../../controllers/RestaurantController.php" method="post">';
-        $result .= '<input type="hidden" name="type" value="delete">';
-        $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';
-        $result .= '<button type="submit" class="btn btn-danger" name="delete" id="btn_delete">Borrar</button>';
-        $result .= '</form>';
-        $result .= '</div>';
-        $result .= '</div>';
-        $result .= '</div>';
+    function drawRestaurant($isLogged, $type){
+        $result = 
+            '<div class="col-12 col-md-6 col-lg-4 mt-5">'.
+                '<div class="card h-100">'.
+                    '<img class="card-img-top" src="'.$this->getImage().'"alt="Card image cap">'.
+                    '<div class="card-body">'.
+                        '<span class="badge bg-primary">'.$this->getMinorprice().'-'.$this->getMayorprice().'</span>'.
+                        '<h4 class="card-title">'.$this->getName().'</h4>'.
+                        '<p class="card-text">'.$this->getMenu().'</p>'.
+                    '</div>'.
+                    '<div class="card-footer d-flex justify-content-around">';
 
+        if(!$isLogged){
+            $result = $this->drawBookForm($result);
+        }
+        
+        if($isLogged && $type == "Gestor"){
+            $result = $this->drawBookForm($result);
+            $result = $this->drawModifyForm($result);
+        }
+        
+        if($isLogged && $type == "Admin"){
+            $result = $this->drawBookForm($result);
+            $result = $this->drawModifyForm($result);
+            $result = $this->drawDeleteForm($result);           
+        }                    
+                
+        $result .=      '</div>'.
+                    '</div>'.
+                '</div>';
+        
+        return $result;
+    }
+    
+    function drawBookForm($result){
+        $result .= '<form action="../../views/public/booking.php" method="post">'.
+                            '<input type="hidden" name="type" value="book">'.
+                            '<input type="hidden" name="id" value="'.$this->getId().'">'.
+                            '<button type="submit" class="btn btn-success" name="book" id="btn_book">Reservar</button>'.
+                        '</form>';
+        return $result;
+    }
+    
+    function drawModifyForm($result){
+        $result .= '<form action="../../views/private/modify.php" method="post">'.
+                            '<input type="hidden" name="type" value="modify">'.
+                            '<input type="hidden" name="id" value="'.$this->getId().'">'.
+                            '<button type="submit" class="btn btn-warning" name="modify" id="btn_modify">Editar</button>'.
+                        '</form>';
+        return $result;
+    }
+    
+    function drawDeleteForm($result){
+        $result .= '<form action="../../controllers/RestaurantController.php" method="post">'.
+                            '<input type="hidden" name="type" value="delete">'.
+                            '<input type="hidden" name="id" value="'.$this->getId().'">'.
+                            '<button type="submit" class="btn btn-danger" name="delete" id="btn_delete">Borrar</button>'.
+                        '</form>';
         return $result;
     }
 

@@ -7,6 +7,7 @@ $categoryRestaurantes = null;
 $restaurantController = new RestaurantController();
 
 $isLogged = false;
+$type = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "login"){
     $email = $_POST["inputEmail"];
@@ -23,6 +24,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
     
     if (isset($_GET["logged"]) && $_GET["logged"] == "true") {
         $isLogged = true;
+        $type = $_GET["type"];
     }else{
         $isLogged = false;
     }
@@ -59,7 +61,11 @@ $restaurants = $restaurantController->readAction();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="../private/insert.php" id="nuevo_restaurante">Nuevo Restaurante</a>
+                    <?php 
+                        if($isLogged){
+                            echo '<a class="nav-link" aria-current="page" href="../private/insert.php" id="nuevo_restaurante">Nuevo Restaurante</a>';
+                        }
+                    ?>
                 </li>
             </ul>
             
@@ -103,7 +109,7 @@ $restaurants = $restaurantController->readAction();
         </div>
         <div class="col">
             <h1 class="display-3">Descubra y reserva el mejor restaurante</h1>
-            <p class="lead mb-5">una aplicación de 4Vientos.</p>
+            <p class="lead mb-5">Una aplicación de Cuatrovientos</p>
             <form class="input-group" method="get">
                 <input id="buscador" name="buscador" class="form-control"/>
                 <button class="btn btn-primary" type="submit" >Buscar</button>
@@ -120,11 +126,11 @@ $restaurants = $restaurantController->readAction();
             
             if($categoryRestaurantes != null){
                 foreach ($categoryRestaurantes as $restaurant){
-                    echo $restaurant->drawRestaurant();
+                    echo $restaurant->drawRestaurant($isLogged, $type);
                 }
             }else{
                 foreach ($restaurants as $restaurant){
-                    echo $restaurant->drawRestaurant();
+                    echo $restaurant->drawRestaurant($isLogged,$type);
                 }
             }
             

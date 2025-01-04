@@ -35,7 +35,7 @@ class UserController {
             SessionUtils::startSessionIfNotStarted();
             SessionUtils::setSession($user->getEmail(), $user->getType(), $user->getIdUser());
 
-            header('Location: ../views/public/index.php?logged=true');
+            header('Location: ../views/public/index.php?logged=true&type='.$user->getType());
         } else {
             header('Location: ../views/public/index.php?logged=false');
         }
