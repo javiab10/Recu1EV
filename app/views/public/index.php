@@ -88,7 +88,7 @@ $restaurants = $restaurantController->readAction();
                         '<form class="d-flex justify-cotent-around" method="post" action="../../controllers/UserController.php">'.
                             '<label for="type" class="col-form-label me-2">Bienvenido</label>'. 
                             '<input type="hidden" name="type" value="logout">'.
-                            '<button class="btn btn-outline-success d-flex align-items-center" type="submit" id="btn-login">'.
+                            '<button class="btn btn-outline-danger d-flex align-items-center" type="submit" id="btn-login">'.
                                 '<i class="bi bi-door-open px-1"></i> Salir'.
                             '</button>'.
                         '</form>'.
@@ -111,7 +111,7 @@ $restaurants = $restaurantController->readAction();
             <h1 class="display-3">Descubra y reserva el mejor restaurante</h1>
             <p class="lead mb-5">Una aplicación de Cuatrovientos</p>
             <form class="input-group" method="get">
-                <input id="buscador" name="buscador" class="form-control"/>
+                <input id="buscador" name="buscador" class="form-control" placeholder="Categorías: Italiano, Chino, Navarro"/>
                 <button class="btn btn-primary" type="submit" >Buscar</button>
             </form>
         </div>

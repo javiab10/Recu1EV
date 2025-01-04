@@ -13,11 +13,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "booking") {
 
 class BookController {
     const toMainPage = "Location: ../views/public/index.php";
-    const toBooking = "Location: ../views/public/booking.php?msg=";
+    const toBooking = "Location: ../views/public/booking.php";
+    const bookedCorrectly = "?msg=Reserva realizada correctamente";
+    const errorBooking = "?msg=Error al intentar realizar la reserva";
     const msgEmptyFields = "?error=Debes rellenar todos los campos para realizar la reserva&id=";
     const msgInvalidDate = "?error=La fecha no puede ser anterior a hoy&id=";
     const msgInvalidTime = "?error=Ya no se puede reservar a esta hora&id=";
     const msgUncheckedIP = "?error=Debes aceptar el uso de tu IP&id=";
+    const msgTooManyPersons ="?error=No se admiten reservas para más de 10 personas";
     
     public function __construct() {
         
@@ -52,16 +55,22 @@ class BookController {
             $restaurantController->redirectWithError(self::toBooking, self::msgInvalidTime.$id_restaurant);
         }
         
+        if($persons > 10){
+            $restaurantController->redirectWithError(self::toBooking, self::msgTooManyPersons.$id_restaurant);
+        }
+        
         $reserve = new Book();
         $reserve->setId_restaurant($id_restaurant);
         $reserve->setDate($dateAndTime);
         $reserve->setPersons($persons);
         $reserve->setIP($IP);
         if($bookDAO->book($reserve)){
-            $msgCorrect = "Reserva realizada correctamente";
+            header(self::toBooking.self::bookedCorrectly);
+        }else{
+            header(self::toBooking.self::errorBooking);
         }
         
-        header(self::toBooking.$msgCorrect);
+        
     }
 
 }
