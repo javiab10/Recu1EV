@@ -5,15 +5,15 @@ require_once(dirname(__FILE__) . '/../../persistence/DAO/ReservaDAO.php');
 require_once(dirname(__FILE__) . '/../model/validations/ValidationRules.php');
 require_once(dirname(__FILE__) . '/../model/Book.php');
 
-$bookController = new ReservaController();
+$bookController = new BookController();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "booking") {
     $bookController->createBook();
 }
 
-class ReservaController {
+class BookController {
     const toMainPage = "Location: ../views/public/index.php";
-    const toBooking = "Location: ../views/public/booking.php";
+    const toBooking = "Location: ../views/public/booking.php?msg=";
     const msgEmptyFields = "?error=Debes rellenar todos los campos para realizar la reserva&id=";
     const msgInvalidDate = "?error=La fecha no puede ser anterior a hoy&id=";
     const msgInvalidTime = "?error=Ya no se puede reservar a esta hora&id=";
@@ -48,7 +48,7 @@ class ReservaController {
             $restaurantController->redirectWithError(self::toBooking, self::msgInvalidDate.$id_restaurant);
         }
         
-        if($date == $dateTime->format("Y-m-d") && $time <= $dateime->format("H:i:s")){
+        if($date == $dateTime->format("Y-m-d") && $time <= $dateTime->format("H:i:s")){
             $restaurantController->redirectWithError(self::toBooking, self::msgInvalidTime.$id_restaurant);
         }
         
@@ -57,9 +57,11 @@ class ReservaController {
         $reserve->setDate($dateAndTime);
         $reserve->setPersons($persons);
         $reserve->setIP($IP);
-        $bookDAO->book($reserve);
+        if($bookDAO->book($reserve)){
+            $msgCorrect = "Reserva realizada correctamente";
+        }
         
-        header(self::toMainPage);
+        header(self::toBooking.$msgCorrect);
     }
 
 }

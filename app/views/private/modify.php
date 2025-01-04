@@ -41,9 +41,9 @@
 
 <!-- FORMULARIO DE INSERCIÓN -->
 <form class="container" method="post" action="../../controllers/RestaurantController.php">
-    <input type="hidden" id="type" name="type" value="editar">
+    <input type="hidden" id="type" name="type" value="edit">
     <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "modificar") {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "modify") {
             //Llamada que hace la edición en la BD
             $id=$_POST["id"];
             echo '<input type="hidden" name="id" value="'.$id.'">';
@@ -51,6 +51,8 @@
         
         if (isset($_GET['error'])) {
             echo "<p>{$_GET['error']}</p>";
+            $id = $_GET['id'];
+            echo '<input type="hidden" name="id" value="'.$id.'">';
         }
     ?>
     <div class="row p-3">

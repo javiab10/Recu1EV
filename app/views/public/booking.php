@@ -47,7 +47,7 @@ $restaurantController = new RestaurantController();
 
 
 <!-- FORMULARIO DE INSERCIÓN --> 
-<form class="container" method="post" action="../../controllers/ReservaController.php">
+<form class="container" method="post" action="../../controllers/BookController.php">
     <input type="hidden" id="type" name="type" value="booking">
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "book") {
@@ -57,11 +57,22 @@ $restaurantController = new RestaurantController();
             echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restaurantController->fetchRestaurantById($id).'</h1>';
         }
         
-        if (isset($_GET['error'])) {
-            $id = $_GET['id'];
-            echo "<p>{$_GET['error']}</p>";
-            echo '<input type="hidden" name="id" value="'.$id.'">';
-            echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restaurantController->fetchRestaurantById($id).'</h1>';
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            if(isset($_GET["error"])){
+                $error = $_GET["error"];
+                echo "<p>".$error."</p>";
+            }
+            if(isset($_GET["msg"])){
+                $msg = $_GET["msg"];
+                echo "<p>".$msg."</p>";
+            }
+            
+            if(isset($_GET["id"])){
+                $id = $_GET["id"];
+                echo '<input type="hidden" name="id" value="'.$_GET['id'].'">';
+                echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restaurantController->fetchRestaurantById($id).'</h1>';
+            }
+            
         }
     ?>
     <div class="row p-3 justify-content-center">

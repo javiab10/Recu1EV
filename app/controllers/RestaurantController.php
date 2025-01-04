@@ -11,9 +11,9 @@ $restaurantController = new RestaurantController();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST["type"] == "create") {
         $restaurantController->createAction();
-    }elseif ($_POST["type"] == "borrar") {
+    }elseif ($_POST["type"] == "delete") {
         $restaurantController->deleteAction();
-    }elseif ($_POST["type"] == "editar") {
+    }elseif ($_POST["type"] == "edit") {
         $restaurantController->editAction();
     }
 }
@@ -22,9 +22,9 @@ class RestaurantController {
     const toMainPage = "Location: ../views/public/index.php";
     const toInsert = "Location: ../views/private/insertar.php";
     const toModify = "Location: ../views/private/modify.php";
-    const msgEmptyFields = "?error=Todos los campos deben estar completos";
-    const msgInvalidURL = "?error=URL de imagen No válida";
-    const msgInvalidCategory = "?error=Categoría de Restaurante no válida";
+    const msgEmptyFields = "?error=Todos los campos deben estar completos&id=";
+    const msgInvalidURL = "?error=URL de imagen No válida&id=";
+    const msgInvalidCategory = "?error=Categoría de Restaurante no válida&id=";
     
     public function __construct(){
         
@@ -79,7 +79,7 @@ class RestaurantController {
     
     function editAction() {
         $restaurantDAO = new RestaurantDAO();
-        $id = $this->checkID();
+        $id_restaurant = $this->checkID();
         // Obtención de los valores del formulario y validación
         $name = ValidationRules::test_input($_POST["name"]);
         $isUrl = ValidationRules::validate_url($_POST["picture"]);
@@ -90,21 +90,21 @@ class RestaurantController {
         $idCategory = $restaurantDAO->fetchCategoryByName($_POST["category"]);
         
         if($name==null||$image==null||$menu==null||$minorprice==null||$mayorprice==null){
-            $this->redirectWithError(self::toModify, self::msgEmptyFields);
+            $this->redirectWithError(self::toModify, self::msgEmptyFields.$id_restaurant);
         }
         
         if(!$isUrl){
-            $this->redirectWithError(self::toModify, self::msgInvalidURL);
+            $this->redirectWithError(self::toModify, self::msgInvalidURL.$id_restaurant);
         }
         
         if($idCategory == null){
-            $this->redirectWithError(self::toModify, self::msgInvalidCategory);
+            $this->redirectWithError(self::toModify, self::msgInvalidCategory.$id_restaurant);
         }
         
         // Creamos el objeto auxiliar y lo llenamos con sus atributos 
         $restaurant = self::createRestaurant($name, $image, $menu, $minorprice, $mayorprice, $idCategory);
         // Establecemos el id
-        $restaurant->setId($id);
+        $restaurant->setId($id_restaurant);
         //Usamos el objeto RestauranteDAO para hacer las llamadas a la BD
         $restaurantDAO->update($restaurant);
 
