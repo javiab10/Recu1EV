@@ -1,6 +1,6 @@
 <?php
 
-class Restaurante {
+class Restaurant {
     private $id;
     private $name;
     private $image;
@@ -69,7 +69,7 @@ class Restaurante {
         $this->idCategory = $idCategory;
     }
     
-    function pintarRestaurante(){
+    function drawRestaurant(){
         $result = '<div class="col-12 col-md-6 col-lg-4 mt-5">';
         $result .= '<div class="card h-100">';
         $result .= '<img class="card-img-top" src="'.$this->getImage().'"alt="Card image cap">';
@@ -79,17 +79,17 @@ class Restaurante {
         $result .= '<p class="card-text">'.$this->getMenu().'</p>';
         $result .= '</div>';
         $result .= '<div class="card-footer d-flex justify-content-around">';
-        $result .= '<form action="../../views/public/reservar.php" method="post">';
-        $result .= '<input type="hidden" name="type" value="reserve">';
+        $result .= '<form action="../../views/public/booking.php" method="post">';
+        $result .= '<input type="hidden" name="type" value="book">';
         $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';
         $result .= '<button type="submit" class="btn btn-success" name="reservar" id="boton_reservar">Reservar</button>';
         $result .= '</form>';
-        $result .= '<form action="../../views/private/modificar.php" method="post">';
+        $result .= '<form action="../../views/private/modify.php" method="post">';
         $result .= '<input type="hidden" name="type" value="modificar">';
         $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';
         $result .= '<button type="submit" class="btn btn-warning" name="modificar" id="boton_modificar">Editar</button>';
         $result .= '</form>';
-        $result .= '<form action="../../controllers/RestauranteController.php" method="post">';
+        $result .= '<form action="../../controllers/RestaurantController.php" method="post">';
         $result .= '<input type="hidden" name="type" value="borrar">';
         $result .= '<input type="hidden" name="id" value="'.$this->getId().'">';
         $result .= '<button type="submit" class="btn btn-danger" name="borrar" id="boton_delete">Borrar</button>';

@@ -2,7 +2,7 @@
 
 class ValidationRules {
     
-     public static function test_input($data) {
+    public static function test_input($data) {
         // Verifica si el dato está vacío
         if (empty(trim($data))) {
             return null; // Retorna null si el dato está vacío
@@ -20,4 +20,5 @@ class ValidationRules {
         // Valida si $data es una URL y retorna true o false
         return filter_var($data, FILTER_VALIDATE_URL) !== false;
     }
+    
 }

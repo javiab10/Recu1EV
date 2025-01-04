@@ -1,6 +1,6 @@
 <?php
 
-class Reserva {
+class Book {
     private $id;
     private $id_restaurant;
     private $date;

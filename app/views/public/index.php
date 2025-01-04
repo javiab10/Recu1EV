@@ -1,18 +1,18 @@
 <?php
-require_once '../../model/Restaurante.php';
-require_once '../../controllers/RestauranteController.php';
+require_once '../../model/Restaurant.php';
+require_once '../../controllers/RestaurantController.php';
 
 $categoryRestaurantes = null;
+$restaurantController = new RestaurantController();
 
 if (isset($_GET["buscador"])) {
-    $categoryRestaurantes = $restauranteController->fetchCategoryByName($_GET["buscador"]);
+    $categoryRestaurantes = $restaurantController->fetchCategoryByName($_GET["buscador"]);
     if($categoryRestaurantes == null){
         echo "no hay resultados";
     }
 }
     
-$restauranteController = new RestauranteController();
-$restaurantes = $restauranteController->readAction();
+$restaurants = $restaurantController->readAction();
 
 ?>
 
@@ -81,12 +81,12 @@ $restaurantes = $restauranteController->readAction();
         <?php
             
             if($categoryRestaurantes != null){
-                foreach ($categoryRestaurantes as $restaurante){
-                    echo $restaurante->pintarRestaurante();
+                foreach ($categoryRestaurantes as $restaurant){
+                    echo $restaurant->drawRestaurant();
                 }
             }else{
-                foreach ($restaurantes as $restaurante){
-                    echo $restaurante->pintarRestaurante();
+                foreach ($restaurants as $restaurant){
+                    echo $restaurant->drawRestaurant();
                 }
             }
             

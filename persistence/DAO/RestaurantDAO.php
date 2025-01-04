@@ -3,7 +3,7 @@
 //dirname(__FILE__) Es el directorio del archivo actual
 require_once(dirname(__FILE__) . '/../config/PersistentManager.php');
 
-class RestauranteDAO {
+class RestaurantDAO {
     //Se define una constante con el nombre de la tabla
     const RESTAURANTE_TABLE = 'restaurant';
     const CATEGORY_TABLE = 'category';
@@ -20,33 +20,33 @@ class RestauranteDAO {
     public function selectAll() {
         $query = "SELECT * FROM " . self::RESTAURANTE_TABLE;
         $result = mysqli_query($this->conn, $query);
-        $restaurantes = array();
-        while ($restauranteBD = mysqli_fetch_array($result)) {
+        $restaurants = array();
+        while ($restaurantDB = mysqli_fetch_array($result)) {
 
-            $restaurante= new Restaurante();
-            $restaurante->setId($restauranteBD["id"]);
-            $restaurante->setName($restauranteBD["name"]);
-            $restaurante->setImage($restauranteBD["image"]);
-            $restaurante->setMenu($restauranteBD["menu"]);
-            $restaurante->setMinorprice($restauranteBD["minorprice"]);
-            $restaurante->setMayorprice($restauranteBD["mayorprice"]);
-            $restaurante->setIdCategory($restauranteBD["idCategory"]);
+            $restaurant= new Restaurant();
+            $restaurant->setId($restaurantDB["id"]);
+            $restaurant->setName($restaurantDB["name"]);
+            $restaurant->setImage($restaurantDB["image"]);
+            $restaurant->setMenu($restaurantDB["menu"]);
+            $restaurant->setMinorprice($restaurantDB["minorprice"]);
+            $restaurant->setMayorprice($restaurantDB["mayorprice"]);
+            $restaurant->setIdCategory($restaurantDB["idCategory"]);
             
-            array_push($restaurantes, $restaurante);
+            array_push($restaurants, $restaurant);
         }
-        return $restaurantes;
+        return $restaurants;
     }
     
-    public function insert($restaurante) {
+    public function insert($restaurant) {
         $query = "INSERT INTO " . self::RESTAURANTE_TABLE . 
                 " (name, image, menu, minorprice, mayorprice, idCategory) VALUES(?,?,?,?,?,?)";
         $stmt = mysqli_prepare($this->conn, $query);
-        $name = $restaurante->getName();
-        $image = $restaurante->getImage();
-        $menu = $restaurante->getMenu();
-        $minorprice = $restaurante->getMinorprice();
-        $mayorprice = $restaurante->getMayorprice();
-        $idCategory = $restaurante->getIdCategory();
+        $name = $restaurant->getName();
+        $image = $restaurant->getImage();
+        $menu = $restaurant->getMenu();
+        $minorprice = $restaurant->getMinorprice();
+        $mayorprice = $restaurant->getMayorprice();
+        $idCategory = $restaurant->getIdCategory();
         
         mysqli_stmt_bind_param($stmt, "sssddi", $name, $image, $menu, $minorprice, $mayorprice, $idCategory);
         return $stmt->execute();        
@@ -60,18 +60,18 @@ class RestauranteDAO {
         return $stmt->execute();
     }
     
-    public function update($restaurante) {
+    public function update($restaurant) {
         $query = "UPDATE " . self::RESTAURANTE_TABLE .
                 " SET name=?, image=?, menu=?, minorprice=?, mayorprice=?, idCategory=?"
                 . " WHERE id=?";
         $stmt = mysqli_prepare($this->conn, $query);
-        $name = $restaurante->getName();
-        $image = $restaurante->getImage();
-        $menu = $restaurante->getMenu();
-        $minorprice = $restaurante->getMinorprice();
-        $mayorprice = $restaurante->getMayorprice();
-        $idCategory = $restaurante->getIdCategory();
-        $id = $restaurante->getId();
+        $name = $restaurant->getName();
+        $image = $restaurant->getImage();
+        $menu = $restaurant->getMenu();
+        $minorprice = $restaurant->getMinorprice();
+        $mayorprice = $restaurant->getMayorprice();
+        $idCategory = $restaurant->getIdCategory();
+        $id = $restaurant->getId();
         
         mysqli_stmt_bind_param($stmt, "sssddii", $name, $image, $menu, $minorprice, $mayorprice, $idCategory, $id);
         return $stmt->execute();        
@@ -97,21 +97,21 @@ class RestauranteDAO {
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         
-        $restaurantes = array();
-        while ($restauranteBD = mysqli_fetch_array($result)) {
+        $restaurants = array();
+        while ($restaurantDB = mysqli_fetch_array($result)) {
 
-            $restaurante= new Restaurante();
-            $restaurante->setId($restauranteBD["restaurant_id"]);
-            $restaurante->setName($restauranteBD["restaurant_name"]);
-            $restaurante->setImage($restauranteBD["image"]);
-            $restaurante->setMenu($restauranteBD["menu"]);
-            $restaurante->setMinorprice($restauranteBD["minorprice"]);
-            $restaurante->setMayorprice($restauranteBD["mayorprice"]);
-            $restaurante->setIdCategory($restauranteBD["restaurant_idCategory"]);
+            $restaurant= new Restaurant();
+            $restaurant->setId($restaurantDB["restaurant_id"]);
+            $restaurant->setName($restaurantDB["restaurant_name"]);
+            $restaurant->setImage($restaurantDB["image"]);
+            $restaurant->setMenu($restaurantDB["menu"]);
+            $restaurant->setMinorprice($restaurantDB["minorprice"]);
+            $restaurant->setMayorprice($restaurantDB["mayorprice"]);
+            $restaurant->setIdCategory($restaurantDB["restaurant_idCategory"]);
             
-            array_push($restaurantes, $restaurante);
+            array_push($restaurants, $restaurant);
         }
-        return $restaurantes;
+        return $restaurants;
     }
     
     public function fetchCategoryByName($name){

@@ -3,7 +3,7 @@
 require_once(dirname(__FILE__) . '/../config/PersistentManager.php');
 
 class ReservaDAO {
-    const RESERVE_TABLE = 'reserve';
+    const BOOK_TABLE = 'book';
     
     private $conn = null;
     
@@ -11,14 +11,14 @@ class ReservaDAO {
         $this->conn = PersistentManager::getInstance()->get_connection();
     }
     
-    public function reserve($reserve){
-        $query = "INSERT INTO " . self::RESERVE_TABLE. 
+    public function book($book){
+        $query = "INSERT INTO " . self::BOOK_TABLE. 
                 " (id_restaurant, date, persons, IP) VALUES(?,?,?,?)";
         $stmt = mysqli_prepare($this->conn, $query);
-        $id_restaurant = $reserve->getId_restaurant();
-        $date = $reserve->getDate();
-        $persons = $reserve->getPersons();
-        $IP = $reserve->getIP();
+        $id_restaurant = $book->getId_restaurant();
+        $date = $book->getDate();
+        $persons = $book->getPersons();
+        $IP = $book->getIP();
                 
         mysqli_stmt_bind_param($stmt, "isis", $id_restaurant, $date, $persons, $IP);
         return $stmt->execute();        

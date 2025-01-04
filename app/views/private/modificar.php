@@ -40,7 +40,7 @@
 </nav>
 
 <!-- FORMULARIO DE INSERCIÓN -->
-<form class="container" method="post" action="../../controllers/RestauranteController.php">
+<form class="container" method="post" action="../../controllers/RestaurantController.php">
     <input type="hidden" id="type" name="type" value="editar">
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "modificar") {
