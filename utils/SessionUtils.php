@@ -46,9 +46,7 @@ class SessionUtils {
     }
 
     static function loggedIn() {
-        session_start([
-            'cookie_lifetime' => 86400,
-        ]);
+        self::startSessionIfNotStarted();
         if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
             // last request was more than 30 minutes ago
             session_unset();     // unset $_SESSION variable for the run-time 
@@ -63,7 +61,7 @@ class SessionUtils {
     }
     
     static function getIdUser() {
-        session_start();
+        self::startSessionIfNotStarted();
         return $_SESSION['id_user'];
     }
 

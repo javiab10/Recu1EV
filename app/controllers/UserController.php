@@ -35,14 +35,14 @@ class UserController {
             SessionUtils::startSessionIfNotStarted();
             SessionUtils::setSession($user->getEmail(), $user->getType(), $user->getIdUser());
 
-            header('Location: ../views/public/index.php?logged=true&type='.$user->getType());
+            header('Location: ../views/public/index.php');
         } else {
-            header('Location: ../views/public/index.php?logged=false');
+            header('Location: ../views/public/index.php?error=invalid_credentials');
         }
     }
     
     public function loggOut(){
         SessionUtils::destroySession();
-        header('Location: ../views/public/index.php?logged=false');
+        header('Location: ../views/public/index.php');
     }
 }

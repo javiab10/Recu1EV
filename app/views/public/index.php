@@ -2,12 +2,14 @@
 require_once '../../model/Restaurant.php';
 require_once '../../controllers/RestaurantController.php';
 require_once '../../controllers/UserController.php';
+require_once '../../../utils/SessionUtils.php';
 
 $categoryRestaurantes = null;
 $restaurantController = new RestaurantController();
 
-$isLogged = false;
-$type = "";
+SessionUtils::startSessionIfNotStarted();
+$isLogged = $isLogged = SessionUtils::loggedIn();
+$type = $isLogged ? $_SESSION['user_type'] : "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "login"){
     $email = $_POST["inputEmail"];
@@ -20,13 +22,6 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
         if ($categoryRestaurantes == null) {
             echo "no hay resultados";
         }
-    }
-    
-    if (isset($_GET["logged"]) && $_GET["logged"] == "true") {
-        $isLogged = true;
-        $type = $_GET["type"];
-    }else{
-        $isLogged = false;
     }
 }
     

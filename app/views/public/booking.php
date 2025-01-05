@@ -34,13 +34,6 @@ $restaurantController = new RestaurantController();
                     <a class="nav-link" aria-current="page" href="../public/index.php" id="inicio">Inicio</a>
                 </li>
             </ul>
-            <div class="d-flex" id="form-login">
-                <input class="form-control" type="text" placeholder="User" aria-label="User" id="input-login">
-                <input class="form-control" type="password" placeholder="Password" aria-label="Password" id="input-pass">
-                <button class="btn btn-outline-success d-flex align-items-center" type="submit" id="btn-login">
-                    <i class="bi bi-door-open px-1"></i> Acceder
-                </button>
-            </div>
         </div>
     </div>
 </nav>

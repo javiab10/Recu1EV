@@ -69,7 +69,10 @@ class Restaurant {
         $this->idCategory = $idCategory;
     }
     
-    function drawRestaurant($isLogged, $type){
+    function drawRestaurant(){
+        $isLogged = $isLogged = SessionUtils::loggedIn();
+        $type = $isLogged ? $_SESSION['user_type'] : "";
+        
         $result = 
             '<div class="col-12 col-md-6 col-lg-4 mt-5">'.
                 '<div class="card h-100">'.
