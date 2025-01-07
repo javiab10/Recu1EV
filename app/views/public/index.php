@@ -15,15 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "login"){
     $email = $_POST["inputEmail"];
     $password = $_POST["inputPass"];    
 }
-
-if($_SERVER["REQUEST_METHOD"] == "GET"){
-    if (isset($_GET["buscador"])) {
-        $categoryRestaurantes = $restaurantController->fetchCategoryByName($_GET["buscador"]);
-        if ($categoryRestaurantes == null) {
-            echo "no hay resultados";
-        }
-    }
-}
     
 $restaurants = $restaurantController->readAction();
 
@@ -115,6 +106,16 @@ $restaurants = $restaurantController->readAction();
             <h1 class="display-3">Descubra y reserva el mejor restaurante</h1>
             <p class="lead mb-5">Una aplicación de Cuatrovientos</p>
             <form class="input-group" method="get">
+                <?php
+                    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                        if (isset($_GET["buscador"])) {
+                            $categoryRestaurantes = $restaurantController->fetchCategoryByName($_GET["buscador"]);
+                            if ($categoryRestaurantes == null) {
+                                echo "no hay resultados";
+                            }
+                        }
+                    }
+                ?>
                 <input id="buscador" name="buscador" class="form-control" placeholder="Categorías: Italiano, Chino, Navarro"/>
                 <button class="btn btn-primary" type="submit" >Buscar</button>
             </form>
