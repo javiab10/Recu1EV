@@ -147,9 +147,19 @@ class RestaurantController {
         return $restaurantDAO->selectCategory($nameCategory);
     }
     
+    function fetchCategoryNameById($id){
+        $restaurantDAO = new RestaurantDAO();
+        return $restaurantDAO->fetchCategoryNameById($id);
+    }
+    
     function fetchRestaurantById($id){
         $restaurantDAO = new RestaurantDAO();
         return $restaurantDAO->fetchRestaurantNameById($id);
+    }
+    
+    function fetchFullRestaurantById($id){
+        $restaurantDAO = new RestaurantDAO();
+        return $restaurantDAO->fetchFullRestaurantNameById($id);
     }
     
 }

@@ -130,6 +130,22 @@ class RestaurantDAO {
         }
     }
     
+    public function fetchCategoryNameById($id){
+        $query = "SELECT name FROM ".self::CATEGORY_TABLE
+                . " WHERE id = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt,"i", $id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result); 
+            return $row['name']; 
+        } else {
+            return null;
+        }
+    }
+    
     public function fetchRestaurantNameById($id){
         $query = "SELECT name FROM ".self::RESTAURANTE_TABLE
                 . " WHERE id = ?";
@@ -141,6 +157,31 @@ class RestaurantDAO {
         if (mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_array($result); 
             return $row['name']; 
+        } else {
+            return null;
+        }
+    }
+    
+    public function fetchFullRestaurantNameById($id){
+        $query = "SELECT * FROM ".self::RESTAURANTE_TABLE
+                . " WHERE id = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt,"i", $id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_array($result);
+            $restaurant = new Restaurant();
+            $restaurant->setId($row["id"]);
+            $restaurant->setName($row["name"]);
+            $restaurant->setImage($row["image"]);
+            $restaurant->setMenu($row["menu"]);
+            $restaurant->setMinorprice($row["minorprice"]);
+            $restaurant->setMayorprice($row["mayorprice"]);
+            $restaurant->setIdCategory($row["idCategory"]);
+            return $restaurant; 
+            
         } else {
             return null;
         }

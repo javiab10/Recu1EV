@@ -1,3 +1,7 @@
+<?php
+require_once (dirname(__FILE__).'../../../controllers/RestaurantController.php');
+require_once (dirname(__FILE__).'../../../model/Restaurant.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +31,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-1 custom-hover" href="index.php">El Tenedor 4V</a>
+            <a class="navbar-brand ms-1 custom-hover" href="../public/index.php">El Tenedor 4V</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -45,16 +49,20 @@
 <form class="container" method="post" action="../../controllers/RestaurantController.php">
     <input type="hidden" id="type" name="type" value="edit">
     <?php
+        $restaurantController = new RestaurantController;
+        
         if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "modify") {
             //Llamada que hace la edición en la BD
             $id=$_POST["id"];
-            echo '<input type="hidden" name="id" value="'.$id.'">';
+            $restaurant = $restaurantController->fetchFullRestaurantById($id);
+            echo '<input type="hidden" name="id" value="'.$restaurant->getId().'">';
         }
         
         if (isset($_GET['error'])) {
             echo "<p>{$_GET['error']}</p>";
             $id = $_GET['id'];
-            echo '<input type="hidden" name="id" value="'.$id.'">';
+            $restaurant = $restaurantController->fetchFullRestaurantById($id);
+            echo '<input type="hidden" name="id" value="'.$restaurant->getId().'">';
         }
     ?>
     <div class="row p-3">
@@ -62,41 +70,59 @@
             Nombre
         </label>
         <div class="col-10">
-            <input type="text" class="form-control" name="name" id="name" placeholder="Nombre">
+            <input type="text" class="form-control" name="name" id="name" value="<?php echo $restaurant->getName();?>">
         </div>
     </div>
     <div class="row p-3">
         <label for="cover" class="col-2 col-form-label">URL Imagen</label>
         <div class="col-10">
-            <input type="text" class="form-control" id="picture" name="picture" placeholder="Picture">
+            <input type="text" class="form-control" id="picture" name="picture" value="<?php echo $restaurant->getImage();?>">
         </div>
     </div>
     <div class="row p-3">
         <label for="menu" class="col-2 col-form-label">Menu</label>
         <div class="col-10">
-            <textarea class="form-control" id="menu" name="menu" style="height: 100px" placeholder="menu"></textarea>
+            <textarea class="form-control" id="menu" name="menu" style="height: 100px"><?php echo $restaurant->getMenu();?></textarea>
         </div>
     </div>
     <div class="row p-3">
         <label for="minorprice" class="col-2 col-form-label">Precio Mínimo</label>
         <div class="col-10">
-            <input type="text" class="form-control" id="minorprice" name="minorprice" placeholder="Minor Price">
+            <input type="text" class="form-control" id="minorprice" name="minorprice" value="<?php echo $restaurant->getMinorprice();?>">
         </div>
     </div>
     <div class="row p-3">
         <label for="mayorprice" class="col-2 col-form-label">Precio Máximo</label>
         <div class="col-10">
-            <input type="text" class="form-control" id="mayorprice" name="mayorprice" placeholder="Mayor Price">
+            <input type="text" class="form-control" id="mayorprice" name="mayorprice" value="<?php echo $restaurant->getMayorprice();?>">
         </div>
     </div>
     <div class="row p-3">
         <label for="category" class="col-2 col-form-label">Categoría</label>
         <div class="col-10">
             <select class="form-select" id="category" name="category" >
-                <option selected>Selecciona una Categoría</option>
-                <option value="Italiano">Italiano</option>
-                <option value="Chino">Chino</option>
-                <option value="Navarro">Navarro</option>
+                <?php 
+                    $idCategory = $restaurant->getIdCategory();
+                    $restaurantCategory = $restaurantController->fetchCategoryNameById($idCategory);
+                    if($restaurantCategory == 'Italiano'){
+                        echo '<option value="Italiano" selected>Italiano</option>';
+                        echo '<option value="Chino">Chino</option>';
+                        echo '<option value="Navarro">Navarro</option>';
+                    }else if($restaurantCategory == 'Chino'){
+                        echo '<option value="Italiano">Italiano</option>';
+                        echo '<option value="Chino" selected>Chino</option>';
+                        echo '<option value="Navarro">Navarro</option>';
+                    }else if($restaurantCategory == 'Navarro'){
+                        echo '<option value="Italiano">Italiano</option>';
+                        echo '<option value="Chino">Chino</option>';
+                        echo '<option value="Navarro" selected>Navarro</option>';
+                    }else{
+                        echo '<option selected>Selecciona una Categoría</option>';
+                        echo '<option value="Italiano">Italiano</option>';
+                        echo '<option value="Chino">Chino</option>';
+                        echo '<option value="Navarro">Navarro</option>';
+                    }
+                ?>
             </select>
         </div>
     </div>

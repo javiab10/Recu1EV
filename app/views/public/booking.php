@@ -55,8 +55,9 @@ $restaurantController = new RestaurantController();
         if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["type"] == "book") {
             //Llamada que hace la edición en la BD
             $id=$_POST["id"];
+            $restaurantName = $restaurantController->fetchRestaurantById($id);
             echo '<input type="hidden" name="id" value="'.$id.'">';
-            echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restaurantController->fetchRestaurantById($id).'</h1>';
+            echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restaurantName.'</h1>';
         }
         
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -71,8 +72,9 @@ $restaurantController = new RestaurantController();
             
             if(isset($_GET["id"])){
                 $id = $_GET["id"];
-                echo '<input type="hidden" name="id" value="'.$_GET['id'].'">';
-                echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restaurantController->fetchRestaurantById($id).'</h1>';
+                $restaurantName = $restaurantController->fetchRestaurantById($id);
+                echo '<input type="hidden" name="id" value="'.$id.'">';
+                echo '<h1 class="mt-4 display 2 text-center">Reservar en '.$restaurantName.'</h1>';
             }
             
         }
