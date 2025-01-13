@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 class RestaurantController {
     const toMainPage = "Location: ../views/public/index.php";
-    const toInsert = "Location: ../views/private/insertar.php";
+    const toInsert = "Location: ../views/private/insert.php";
     const toModify = "Location: ../views/private/modify.php";
     const msgEmptyFields = "?error=Todos los campos deben estar completos&id=";
     const msgInvalidURL = "?error=URL de imagen No válida&id=";
