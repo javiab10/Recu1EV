@@ -7,6 +7,7 @@ Una web para manejar datos sobre restaurantes de la zona. Los usuarios podrán h
 - [Requisitos](#requisitos)
 - [Instalación](#instalación)
 - [Uso](#uso)
+- [Contribución](#contribución)
 
 ## Requisitos
 
